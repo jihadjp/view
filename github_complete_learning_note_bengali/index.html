@@ -1,0 +1,593 @@
+
+
+<style>
+  h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-sans);color:var(--color-text-primary)}
+  .wrap{max-width:680px;padding:0 0 2rem}
+  .hero{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:1.5rem 1.75rem;margin-bottom:1.5rem;border:0.5px solid var(--color-border-tertiary)}
+  .hero-title{font-size:22px;font-weight:500;margin-bottom:4px}
+  .hero-sub{font-size:14px;color:var(--color-text-secondary);line-height:1.6}
+  .badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px;margin-right:6px;margin-top:8px}
+  .badge-blue{background:#E6F1FB;color:#0C447C}
+  .badge-teal{background:#E1F5EE;color:#085041}
+  .badge-amber{background:#FAEEDA;color:#633806}
+  .toc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1.5rem}
+  .toc-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em}
+  .toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+  .toc-item{font-size:13px;padding:5px 8px;border-radius:var(--border-radius-md);color:var(--color-text-secondary);cursor:pointer;border:none;background:transparent;text-align:left;width:100%;transition:background .15s}
+  .toc-item:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+  .section{margin-bottom:1.5rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+  .sec-header{background:var(--color-background-secondary);padding:.9rem 1.25rem;cursor:pointer;display:flex;align-items:center;gap:10px;border:none;width:100%;text-align:left}
+  .sec-header:hover{background:var(--color-background-tertiary)}
+  .sec-icon{font-size:18px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--border-radius-md);flex-shrink:0}
+  .sec-title{font-size:15px;font-weight:500;flex:1}
+  .sec-num{font-size:11px;color:var(--color-text-tertiary);margin-right:4px}
+  .chevron{font-size:14px;color:var(--color-text-tertiary);transition:transform .2s}
+  .chevron.open{transform:rotate(180deg)}
+  .sec-body{padding:1.25rem;display:none;border-top:0.5px solid var(--color-border-tertiary)}
+  .sec-body.open{display:block}
+  h3{font-size:15px;font-weight:500;margin:1rem 0 .5rem;color:var(--color-text-primary)}
+  h3:first-child{margin-top:0}
+  p{font-size:14px;line-height:1.75;color:var(--color-text-secondary);margin-bottom:.75rem}
+  .code-block{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.75rem 1rem;margin:.75rem 0;font-family:var(--font-mono);font-size:12.5px;line-height:1.7;color:var(--color-text-primary);overflow-x:auto;white-space:pre}
+  .comment{color:var(--color-text-tertiary)}
+  .keyword{color:#185FA5}
+  .string{color:#3B6D11}
+  .table-wrap{overflow-x:auto;margin:.75rem 0}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:var(--color-background-secondary);padding:8px 12px;text-align:left;font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)}
+  td{padding:8px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .callout{border-left:3px solid;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:.75rem 1rem;margin:.75rem 0;font-size:13px;line-height:1.65}
+  .callout-tip{background:#E1F5EE;border-color:#1D9E75;color:#085041}
+  .callout-warn{background:#FAEEDA;border-color:#EF9F27;color:#633806}
+  .callout-info{background:#E6F1FB;border-color:#378ADD;color:#185FA5}
+  .flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:.75rem 0}
+  .flow-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:5px 12px;font-size:12.5px;font-weight:500;color:var(--color-text-primary)}
+  .flow-arr{color:var(--color-text-tertiary);font-size:14px}
+  .branch-vis{display:flex;flex-direction:column;gap:6px;margin:.75rem 0}
+  .branch-row{display:flex;align-items:center;gap:8px;font-size:12.5px}
+  .branch-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .dot-main{background:#185FA5}
+  .dot-dev{background:#1D9E75}
+  .dot-feat{background:#D4537E}
+  .dot-rel{background:#EF9F27}
+  .branch-line{height:2px;flex:1;border-radius:1px}
+  .line-main{background:#185FA5}
+  .line-dev{background:#1D9E75}
+  .line-feat{background:#D4537E}
+  .line-rel{background:#EF9F27}
+  .commit{width:8px;height:8px;border-radius:50%;background:#185FA5;border:2px solid var(--color-background-primary);flex-shrink:0}
+  .cmd-row{display:flex;gap:8px;margin:.5rem 0;align-items:flex-start}
+  .cmd{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:4px 10px;font-family:var(--font-mono);font-size:12px;color:var(--color-text-primary);white-space:nowrap}
+  .cmd-desc{font-size:13px;color:var(--color-text-secondary);padding-top:4px}
+  .day-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:1rem;overflow:hidden}
+  .day-header{padding:.75rem 1.25rem;font-weight:500;font-size:14px;display:flex;align-items:center;gap:10px}
+  .day1{background:#E6F1FB;color:#0C447C}
+  .day2{background:#E1F5EE;color:#085041}
+  .day3{background:#FAEEDA;color:#633806}
+  .day-body{padding:1rem 1.25rem;background:var(--color-background-primary)}
+  .task{display:flex;gap:10px;margin-bottom:8px;font-size:13px;color:var(--color-text-secondary);align-items:flex-start}
+  .task-dot{width:6px;height:6px;border-radius:50%;background:var(--color-border-secondary);flex-shrink:0;margin-top:5px}
+  .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:.75rem 0}
+  .profile-card{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.75rem 1rem}
+  .profile-card-title{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px}
+  .profile-card-val{font-size:13px;color:var(--color-text-primary)}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;margin:2px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">গিটহাব সম্পূর্ণ লার্নিং নোট — বিগিনার থেকে প্রো লেভেল</h2>
+
+  <div class="hero">
+    <div class="hero-title">🚀 GitHub: Zero to Pro — সম্পূর্ণ লার্নিং নোট</div>
+    <div class="hero-sub">Senior DevOps Engineer-এর দৃষ্টিকোণ থেকে লেখা। বিগিনার থেকে শুরু করে প্রফেশনাল অটোমেশন পর্যন্ত।</div>
+    <div>
+      <span class="badge badge-blue"><i class="ti ti-git-branch" aria-hidden="true"></i> Git + GitHub</span>
+      <span class="badge badge-teal"><i class="ti ti-robot" aria-hidden="true"></i> CI/CD Automation</span>
+      <span class="badge badge-amber"><i class="ti ti-user-check" aria-hidden="true"></i> Profile Building</span>
+    </div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">বিষয়সূচি</div>
+    <div class="toc-grid">
+      <button class="toc-item" onclick="toggle('s1')">১. Git বনাম GitHub ও সেটআপ</button>
+      <button class="toc-item" onclick="toggle('s2')">২. CLI বনাম GUI</button>
+      <button class="toc-item" onclick="toggle('s3')">৩. ব্রাঞ্চিং স্ট্র্যাটেজি</button>
+      <button class="toc-item" onclick="toggle('s4')">৪. Advanced Topics</button>
+      <button class="toc-item" onclick="toggle('s5')">৫. GitHub Actions (CI/CD)</button>
+      <button class="toc-item" onclick="toggle('s6')">৬. প্রোফাইল বিল্ডিং</button>
+      <button class="toc-item" onclick="toggle('s7')">৭. ৩ দিনের রোডম্যাপ</button>
+    </div>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="section" id="s1">
+    <button class="sec-header" onclick="toggle('s1')">
+      <div class="sec-icon" style="background:#E6F1FB">🔀</div>
+      <span class="sec-title"><span class="sec-num">০১ —</span> Git বনাম GitHub এবং লোকাল সেটআপ</span>
+      <i class="ti ti-chevron-down chevron" id="s1-ch" aria-hidden="true"></i>
+    </button>
+    <div class="sec-body" id="s1-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>বিষয়</th><th>Git</th><th>GitHub</th></tr></thead>
+          <tbody>
+            <tr><td>সংজ্ঞা</td><td>Distributed Version Control System (VCS)</td><td>Git রিপোজিটরি হোস্ট করার ক্লাউড প্ল্যাটফর্ম</td></tr>
+            <tr><td>কোথায় চলে</td><td>তোমার লোকাল কম্পিউটারে</td><td>ইন্টারনেটে (github.com)</td></tr>
+            <tr><td>ইন্টারনেট লাগে?</td><td>না — অফলাইনে কাজ করে</td><td>হ্যাঁ — ক্লাউড ভিত্তিক</td></tr>
+            <tr><td>মূল কাজ</td><td>কোড ট্র্যাক করা, branch, merge</td><td>Collaboration, PR, Issues, Actions</td></tr>
+            <tr><td>উদাহরণ</td><td>git commit, git push</td><td>Pull Request, Fork, Star</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-info">💡 সহজ কথায়: <strong>Git</strong> হলো ইঞ্জিন, আর <strong>GitHub</strong> হলো সেই ইঞ্জিনের গাড়িটা।</div>
+
+      <h3>লোকাল সেটআপ (Step-by-Step)</h3>
+      <div class="code-block"><span class="comment"># ধাপ ১: Git ইনস্টল করো</span>
+<span class="comment"># Windows: https://git-scm.com/download/win</span>
+<span class="comment"># Ubuntu/Debian:</span>
+sudo apt install git -y
+
+<span class="comment"># ধাপ ২: Global Config সেট করো (একবারই করতে হবে)</span>
+git config --global user.name <span class="string">"তোমার নাম"</span>
+git config --global user.email <span class="string">"email@example.com"</span>
+git config --global core.editor <span class="string">"code --wait"</span>  <span class="comment"># VS Code</span>
+
+<span class="comment"># ধাপ ৩: SSH Key তৈরি করো (HTTPS-এর চেয়ে নিরাপদ)</span>
+ssh-keygen -t ed25519 -C <span class="string">"email@example.com"</span>
+cat ~/.ssh/id_ed25519.pub  <span class="comment"># এই key GitHub-এ add করো</span>
+
+<span class="comment"># ধাপ ৪: প্রথম রিপো তৈরি করো</span>
+mkdir my-project && cd my-project
+git init
+echo <span class="string">"# My Project"</span> > README.md
+git add .
+git commit -m <span class="string">"Initial commit"</span>
+git remote add origin git@github.com:username/my-project.git
+git push -u origin main</div>
+
+      <div class="callout callout-tip">✅ Pro Tip: SSH key ব্যবহার করো — প্রতিবার password দিতে হবে না এবং অনেক বেশি secure।</div>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="section" id="s2">
+    <button class="sec-header" onclick="toggle('s2')">
+      <div class="sec-icon" style="background:#E1F5EE">💻</div>
+      <span class="sec-title"><span class="sec-num">০২ —</span> Command Line বনাম GUI: CLI কেন জরুরি</span>
+      <i class="ti ti-chevron-down chevron" id="s2-ch" aria-hidden="true"></i>
+    </button>
+    <div class="sec-body" id="s2-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>বিষয়</th><th>GUI (GitHub Desktop, VS Code)</th><th>CLI (Terminal)</th></tr></thead>
+          <tbody>
+            <tr><td>শেখা</td><td>সহজ, ভিজুয়াল</td><td>একটু কঠিন কিন্তু শক্তিশালী</td></tr>
+            <tr><td>স্পিড</td><td>ধীর (মাউস ক্লিক)</td><td>দ্রুত (keyboard shortcut)</td></tr>
+            <tr><td>অটোমেশন</td><td>❌ সম্ভব নয়</td><td>✅ Shell script দিয়ে সম্ভব</td></tr>
+            <tr><td>Server-এ কাজ</td><td>❌ GUI নেই</td><td>✅ SSH দিয়ে সরাসরি</td></tr>
+            <tr><td>সব feature</td><td>সীমিত feature দেখায়</td><td>Git-এর সব feature ব্যবহার করা যায়</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>সবচেয়ে দরকারি CLI কমান্ডগুলো</h3>
+      <div class="cmd-row"><div class="cmd">git status</div><div class="cmd-desc">কোন ফাইল পরিবর্তিত হয়েছে দেখো</div></div>
+      <div class="cmd-row"><div class="cmd">git log --oneline --graph</div><div class="cmd-desc">সুন্দর গ্রাফিক্যাল commit history</div></div>
+      <div class="cmd-row"><div class="cmd">git diff HEAD~1</div><div class="cmd-desc">শেষ commit-এর সাথে পার্থক্য দেখো</div></div>
+      <div class="cmd-row"><div class="cmd">git blame filename.py</div><div class="cmd-desc">কোন লাইন কে লিখেছে দেখো</div></div>
+      <div class="cmd-row"><div class="cmd">git bisect start</div><div class="cmd-desc">Binary search দিয়ে bug খোঁজো</div></div>
+
+      <div class="callout callout-warn">⚠️ DevOps Engineer হিসেবে: সার্ভারে কখনো GUI থাকে না। SSH দিয়ে লগইন করে CLI-তেই সব কাজ করতে হয়। তাই CLI শেখাটা optional নয়, mandatory।</div>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="section" id="s3">
+    <button class="sec-header" onclick="toggle('s3')">
+      <div class="sec-icon" style="background:#FBEAF0">🌿</div>
+      <span class="sec-title"><span class="sec-num">০৩ —</span> প্রফেশনাল ব্রাঞ্চিং স্ট্র্যাটেজি</span>
+      <i class="ti ti-chevron-down chevron" id="s3-ch" aria-hidden="true"></i>
+    </button>
+    <div class="sec-body" id="s3-body">
+      <h3>Git Flow — বড় প্রজেক্টের জন্য</h3>
+      <p>কখন ব্যবহার করবে: নির্দিষ্ট release cycle আছে এমন প্রজেক্টে (যেমন: মোবাইল অ্যাপ, SaaS product)।</p>
+
+      <div class="branch-vis">
+        <div class="branch-row">
+          <div class="branch-dot dot-main"></div>
+          <span style="font-size:12px;font-weight:500;min-width:80px;color:var(--color-text-primary)">main</span>
+          <div class="branch-line line-main"></div>
+          <div class="commit"></div>
+          <div style="width:40px"></div>
+          <div class="commit"></div>
+          <div style="width:40px"></div>
+          <div class="commit"></div>
+          <span style="font-size:11px;color:var(--color-text-tertiary);margin-left:8px">production-ready</span>
+        </div>
+        <div class="branch-row">
+          <div class="branch-dot dot-dev"></div>
+          <span style="font-size:12px;font-weight:500;min-width:80px;color:var(--color-text-primary)">develop</span>
+          <div class="branch-line line-dev" style="flex:0.6"></div>
+          <div class="commit" style="background:#1D9E75"></div>
+          <div class="branch-line line-dev" style="flex:0.4"></div>
+          <div class="commit" style="background:#1D9E75"></div>
+          <div class="branch-line line-dev" style="flex:0.4"></div>
+          <span style="font-size:11px;color:var(--color-text-tertiary);margin-left:8px">integration</span>
+        </div>
+        <div class="branch-row">
+          <div class="branch-dot dot-feat"></div>
+          <span style="font-size:12px;font-weight:500;min-width:80px;color:var(--color-text-primary)">feature/*</span>
+          <div class="branch-line line-feat" style="flex:0.4"></div>
+          <div class="commit" style="background:#D4537E"></div>
+          <div class="branch-line line-feat" style="flex:0.2"></div>
+          <div class="commit" style="background:#D4537E"></div>
+          <span style="font-size:11px;color:var(--color-text-tertiary);margin-left:8px">নতুন ফিচার</span>
+        </div>
+        <div class="branch-row">
+          <div class="branch-dot dot-rel"></div>
+          <span style="font-size:12px;font-weight:500;min-width:80px;color:var(--color-text-primary)">release/*</span>
+          <div class="branch-line line-rel" style="flex:0.5"></div>
+          <div class="commit" style="background:#EF9F27"></div>
+          <span style="font-size:11px;color:var(--color-text-tertiary);margin-left:8px">release prep</span>
+        </div>
+      </div>
+
+      <div class="code-block"><span class="comment"># Git Flow কমান্ড</span>
+git checkout -b <span class="string">develop</span>                      <span class="comment"># develop branch</span>
+git checkout -b <span class="string">feature/user-auth</span> develop    <span class="comment"># নতুন feature</span>
+git checkout -b <span class="string">release/v1.0</span> develop         <span class="comment"># release branch</span>
+git checkout -b <span class="string">hotfix/fix-login-bug</span> main   <span class="comment"># জরুরি bug fix</span></div>
+
+      <h3>GitHub Flow — সহজ এবং দ্রুত (Recommended for most teams)</h3>
+      <p>কখন ব্যবহার করবে: Continuous Deployment করা হয় এমন প্রজেক্টে (web app, API)।</p>
+
+      <div class="flow">
+        <div class="flow-box">main</div><div class="flow-arr">→</div>
+        <div class="flow-box">feature branch</div><div class="flow-arr">→</div>
+        <div class="flow-box">Pull Request</div><div class="flow-arr">→</div>
+        <div class="flow-box">Code Review</div><div class="flow-arr">→</div>
+        <div class="flow-box">merge to main</div><div class="flow-arr">→</div>
+        <div class="flow-box" style="background:#E1F5EE;color:#085041">Deploy 🚀</div>
+      </div>
+
+      <div class="callout callout-tip">✅ GitHub Flow সহজ নিয়ম: main সবসময় deployable। feature branch-এ কাজ করো, PR দাও, review হলে merge করো।</div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>স্ট্র্যাটেজি</th><th>ব্যবহার করো যখন</th><th>সমস্যা</th></tr></thead>
+          <tbody>
+            <tr><td>Git Flow</td><td>Multiple version, scheduled release</td><td>জটিল, অনেক branch</td></tr>
+            <tr><td>GitHub Flow</td><td>CD pipeline, web app, startup</td><td>বড় team-এ coordination কঠিন</td></tr>
+            <tr><td>Trunk-based</td><td>Senior team, feature flags আছে</td><td>Strong CI/CD দরকার</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="section" id="s4">
+    <button class="sec-header" onclick="toggle('s4')">
+      <div class="sec-icon" style="background:#FAEEDA">⚡</div>
+      <span class="sec-title"><span class="sec-num">০৪ —</span> Advanced Topics: Rebase, Cherry-pick & Stash</span>
+      <i class="ti ti-chevron-down chevron" id="s4-ch" aria-hidden="true"></i>
+    </button>
+    <div class="sec-body" id="s4-body">
+      <h3>Git Rebase — কখন ব্যবহার করবে?</h3>
+      <p>Rebase মানে তোমার branch-এর commits-গুলো অন্য branch-এর উপরে "পুনরায় স্থাপন করা"। এতে commit history সুন্দর ও linear থাকে।</p>
+
+      <div class="flow" style="margin-bottom:.5rem">
+        <span style="font-size:12px;color:var(--color-text-secondary)">Merge (ugly):</span>
+        <div class="flow-box">A→B→C</div><div class="flow-arr">+</div>
+        <div class="flow-box">D→E</div><div class="flow-arr">→</div>
+        <div class="flow-box" style="background:#FCEBEB;color:#791F1F">Merge commit M</div>
+      </div>
+      <div class="flow">
+        <span style="font-size:12px;color:var(--color-text-secondary)">Rebase (clean):</span>
+        <div class="flow-box">A→B→C→D'→E'</div><div class="flow-arr">✓</div>
+        <div class="flow-box" style="background:#E1F5EE;color:#085041">Clean history</div>
+      </div>
+
+      <div class="code-block"><span class="comment"># Interactive Rebase — শেষ 3টি commit ঠিক করো</span>
+git rebase -i HEAD~3
+
+<span class="comment"># main-এর সাথে sync করো (merge commit ছাড়া)</span>
+git checkout feature/my-feature
+git rebase main
+
+<span class="comment"># Conflict হলে:</span>
+git add .               <span class="comment"># conflict ঠিক করে add করো</span>
+git rebase --continue   <span class="comment"># rebase চালু রাখো</span>
+git rebase --abort      <span class="comment"># rebase বাতিল করো</span></div>
+
+      <div class="callout callout-warn">⚠️ Golden Rule: Shared/public branch-এ কখনো Rebase করো না। শুধু তোমার নিজের local feature branch-এ rebase করো।</div>
+
+      <h3>Git Cherry-pick — কখন ব্যবহার করবে?</h3>
+      <p>অন্য branch থেকে শুধু একটি নির্দিষ্ট commit তোমার branch-এ নিয়ে আসতে চাইলে।</p>
+
+      <div class="code-block"><span class="comment"># Use case: hotfix-এর commit টা main-এও দরকার</span>
+git log --oneline       <span class="comment"># commit hash দেখো</span>
+<span class="comment"># Output: abc1234 Fix critical payment bug</span>
+
+git checkout main
+git cherry-pick abc1234 <span class="comment"># শুধু ওই commit নাও</span>
+
+<span class="comment"># একাধিক commit:</span>
+git cherry-pick abc1234 def5678</div>
+
+      <div class="callout callout-tip">✅ Cherry-pick কখন দরকার: কোনো feature branch-এ একটি bug fix করা হয়েছে যেটা production-এ (main) এখনই দরকার, কিন্তু পুরো feature এখনো ready না।</div>
+
+      <h3>Git Stash — কখন ব্যবহার করবে?</h3>
+      <p>অর্ধেক কাজ করা অবস্থায় হঠাৎ অন্য কাজ করতে হলে, commit না করেই কাজ "সরিয়ে রাখো"।</p>
+
+      <div class="code-block"><span class="comment"># সিনারিও: feature-এ কাজ করছো, boss বললো urgent bug fix করো</span>
+git stash push -m <span class="string">"WIP: user dashboard feature"</span>
+
+<span class="comment"># এখন অন্য branch-এ যাও, bug fix করো</span>
+git checkout main
+<span class="comment"># ... bug fix করো ...</span>
+
+<span class="comment"># আবার ফিরে এসো</span>
+git checkout feature/dashboard
+git stash pop          <span class="comment"># শেষ stash ফেরত আনো</span>
+
+<span class="comment"># সব stash দেখো</span>
+git stash list
+<span class="comment"># Output:</span>
+<span class="comment"># stash@{0}: WIP: user dashboard feature</span>
+<span class="comment"># stash@{1}: Old unfinished work</span>
+
+git stash apply stash@{1}  <span class="comment"># নির্দিষ্ট stash apply করো</span></div>
+    </div>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="section" id="s5">
+    <button class="sec-header" onclick="toggle('s5')">
+      <div class="sec-icon" style="background:#EAF3DE">🤖</div>
+      <span class="sec-title"><span class="sec-num">০৫ —</span> GitHub Actions — বাস্তব CI/CD উদাহরণ</span>
+      <i class="ti ti-chevron-down chevron" id="s5-ch" aria-hidden="true"></i>
+    </button>
+    <div class="sec-body" id="s5-body">
+      <p>GitHub Actions হলো GitHub-এর built-in CI/CD platform। Code push করলে automatically test চালাবে, build করবে, deploy করবে।</p>
+
+      <div class="flow">
+        <div class="flow-box">Code Push</div><div class="flow-arr">→</div>
+        <div class="flow-box">Trigger Workflow</div><div class="flow-arr">→</div>
+        <div class="flow-box">Run Tests</div><div class="flow-arr">→</div>
+        <div class="flow-box">Build Docker</div><div class="flow-arr">→</div>
+        <div class="flow-box" style="background:#E1F5EE;color:#085041">Deploy 🚀</div>
+      </div>
+
+      <h3>বাস্তব উদাহরণ: Python App — Test → Build → Deploy</h3>
+      <p>ফাইলের অবস্থান: <code style="font-family:var(--font-mono);font-size:12px;background:var(--color-background-secondary);padding:2px 6px;border-radius:4px">.github/workflows/ci-cd.yml</code></p>
+
+      <div class="code-block"><span class="comment"># .github/workflows/ci-cd.yml</span>
+<span class="keyword">name</span>: CI/CD Pipeline
+
+<span class="keyword">on</span>:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+<span class="keyword">jobs</span>:
+  <span class="string">test</span>:
+    runs-on: ubuntu-latest
+    steps:
+      - <span class="keyword">name</span>: Checkout code
+        uses: actions/checkout@v4
+
+      - <span class="keyword">name</span>: Setup Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: <span class="string">'3.11'</span>
+          cache: <span class="string">'pip'</span>
+
+      - <span class="keyword">name</span>: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - <span class="keyword">name</span>: Run Tests with Coverage
+        run: pytest --cov=app --cov-report=xml
+
+      - <span class="keyword">name</span>: Upload coverage report
+        uses: codecov/codecov-action@v3
+
+  <span class="string">build-and-push</span>:
+    needs: test          <span class="comment"># test pass হলেই চলবে</span>
+    runs-on: ubuntu-latest
+    if: github.ref == <span class="string">'refs/heads/main'</span>
+    steps:
+      - uses: actions/checkout@v4
+
+      - <span class="keyword">name</span>: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - <span class="keyword">name</span>: Build & Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: |
+            myapp/backend:latest
+            myapp/backend:${{ github.sha }}
+
+  <span class="string">deploy</span>:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: production  <span class="comment"># manual approval লাগতে পারে</span>
+    steps:
+      - <span class="keyword">name</span>: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /opt/myapp
+            docker pull myapp/backend:latest
+            docker-compose up -d --no-deps backend
+            echo "✅ Deployed successfully!"</div>
+
+      <div class="callout callout-info">🔐 Secrets: GitHub-এ Settings → Secrets → Actions-এ sensitive data (password, API key) রাখো। কখনো সরাসরি YAML-এ লিখো না।</div>
+
+      <h3>দরকারি Actions Patterns</h3>
+      <div class="cmd-row"><div class="cmd">actions/checkout@v4</div><div class="cmd-desc">কোড checkout করে</div></div>
+      <div class="cmd-row"><div class="cmd">actions/cache@v3</div><div class="cmd-desc">dependencies cache করে (build দ্রুত করে)</div></div>
+      <div class="cmd-row"><div class="cmd">actions/upload-artifact</div><div class="cmd-desc">build output সংরক্ষণ করে</div></div>
+      <div class="cmd-row"><div class="cmd">github.sha</div><div class="cmd-desc">current commit-এর unique hash</div></div>
+    </div>
+  </div>
+
+  <!-- Section 6 -->
+  <div class="section" id="s6">
+    <button class="sec-header" onclick="toggle('s6')">
+      <div class="sec-icon" style="background:#EEEDFE">👤</div>
+      <span class="sec-title"><span class="sec-num">০৬ —</span> GitHub প্রোফাইল: Recruiter-দের আকৃষ্ট করো</span>
+      <i class="ti ti-chevron-down chevron" id="s6-ch" aria-hidden="true"></i>
+    </button>
+    <div class="sec-body" id="s6-body">
+      <p>GitHub প্রোফাইল হলো DevOps/Developer-দের জন্য সবচেয়ে শক্তিশালী resume। Recruiter-রা প্রথমেই এটা দেখেন।</p>
+
+      <h3>১. Profile README তৈরি করো</h3>
+      <p><code style="font-family:var(--font-mono);font-size:12px;background:var(--color-background-secondary);padding:2px 6px;border-radius:4px">username/username</code> নামে একটি repo তৈরি করো — এটি automatically প্রোফাইলে দেখাবে।</p>
+
+      <div class="code-block"><span class="comment"># README.md এ যা রাখবে:</span>
+
+<span class="string">## 👋 Hi, I'm [তোমার নাম]</span>
+
+<span class="string">🔭 Currently working on: Kubernetes-based microservices</span>
+<span class="string">🌱 Learning: Rust & WebAssembly</span>
+<span class="string">💬 Ask me about: DevOps, Python, CI/CD</span>
+<span class="string">📫 Reach me: email@example.com</span>
+
+<span class="comment"># GitHub Stats Badge (dynamic)</span>
+![GitHub stats](https://github-readme-stats.vercel.app/api?username=YOUR_NAME&show_icons=true)
+
+<span class="comment"># Top Languages</span>
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_NAME)</div>
+
+      <h3>২. Pinned Repositories — সেরা কাজ সামনে রাখো</h3>
+      <div class="profile-grid">
+        <div class="profile-card">
+          <div class="profile-card-title">✅ Pin করবে</div>
+          <div class="profile-card-val">Real-world project, সমস্যা সমাধান করেছে এমন কোড, Documentation সহ প্রজেক্ট</div>
+        </div>
+        <div class="profile-card">
+          <div class="profile-card-title">❌ Pin করবে না</div>
+          <div class="profile-card-val">Tutorial follow করা প্রজেক্ট, Empty repo, "Hello World" টাইপ কোড</div>
+        </div>
+      </div>
+
+      <h3>৩. Contribution Graph সবুজ রাখো</h3>
+      <p>Recruiter-রা এই "green squares" দেখেন। প্রতিদিন ছোট হলেও commit করো।</p>
+      <div class="code-block"><span class="comment"># Daily habit: ছোট improvement করো</span>
+git commit -m <span class="string">"docs: improve README clarity"</span>
+git commit -m <span class="string">"refactor: extract helper function"</span>
+git commit -m <span class="string">"test: add edge case coverage"</span></div>
+
+      <h3>৪. Open Source Contribution শুরু করো</h3>
+      <div class="flow">
+        <div class="flow-box">Good First Issue খোঁজো</div><div class="flow-arr">→</div>
+        <div class="flow-box">Fork করো</div><div class="flow-arr">→</div>
+        <div class="flow-box">Fix করো</div><div class="flow-arr">→</div>
+        <div class="flow-box">PR দাও</div><div class="flow-arr">→</div>
+        <div class="flow-box" style="background:#E1F5EE;color:#085041">Profile চমকায় ✨</div>
+      </div>
+
+      <h3>৫. Recruiter-রা কী খোঁজেন?</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin:.5rem 0">
+        <span class="tag">নিয়মিত commit</span>
+        <span class="tag">ভালো README</span>
+        <span class="tag">Working CI/CD</span>
+        <span class="tag">Test coverage</span>
+        <span class="tag">Open source PR</span>
+        <span class="tag">Diverse tech stack</span>
+        <span class="tag">Clean code</span>
+        <span class="tag">Issue tracking</span>
+        <span class="tag">Project Wiki</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 7 -->
+  <div class="section" id="s7">
+    <button class="sec-header" onclick="toggle('s7')">
+      <div class="sec-icon" style="background:#E1F5EE">🗓️</div>
+      <span class="sec-title"><span class="sec-num">০৭ —</span> ৩ দিনের লার্নিং রোডম্যাপ</span>
+      <i class="ti ti-chevron-down chevron" id="s7-ch" aria-hidden="true"></i>
+    </button>
+    <div class="sec-body" id="s7-body">
+      <div class="day-card">
+        <div class="day-header day1">
+          <i class="ti ti-calendar-event" aria-hidden="true" style="font-size:18px"></i>
+          দিন ১ — ভিত্তি গড়ো (Foundation)
+        </div>
+        <div class="day-body">
+          <div class="task"><div class="task-dot"></div><div>সকাল (২ ঘন্টা): Git ইনস্টল, config সেট, SSH key তৈরি করো। GitHub অ্যাকাউন্ট খোলো।</div></div>
+          <div class="task"><div class="task-dot"></div><div>দুপুর (২ ঘন্টা): প্রথম repo তৈরি করো। <code style="font-family:var(--font-mono);font-size:11px">add, commit, push, pull, clone</code> — এই ৫টি কমান্ড আয়ত্ত করো।</div></div>
+          <div class="task"><div class="task-dot"></div><div>বিকাল (২ ঘন্টা): Branch তৈরি করো, feature branch থেকে Pull Request দাও এবং merge করো।</div></div>
+          <div class="task"><div class="task-dot"></div><div>রাতে (১ ঘন্টা): Profile README তৈরি করো। GitHub Flow অনুসরণ করে একটি ছোট প্রজেক্ট তৈরি করো।</div></div>
+          <div class="callout callout-tip" style="margin-top:.75rem">🎯 লক্ষ্য: GitHub-এ প্রথম সবুজ contribution square!</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header day2">
+          <i class="ti ti-calendar-event" aria-hidden="true" style="font-size:18px"></i>
+          দিন ২ — Advanced Git (গভীরে যাও)
+        </div>
+        <div class="day-body">
+          <div class="task"><div class="task-dot"></div><div>সকাল (২ ঘন্টা): Merge vs Rebase পার্থক্য হাতে-কলমে করো। Interactive rebase দিয়ে commit message ঠিক করো।</div></div>
+          <div class="task"><div class="task-dot"></div><div>দুপুর (২ ঘন্টা): Merge conflict তৈরি করো এবং manually সমাধান করো। Cherry-pick ব্যবহার করে দেখো।</div></div>
+          <div class="task"><div class="task-dot"></div><div>বিকাল (২ ঘন্টা): Git Stash ব্যবহার করো। <code style="font-family:var(--font-mono);font-size:11px">git log --graph --all</code> দিয়ে history visualization করো।</div></div>
+          <div class="task"><div class="task-dot"></div><div>রাতে (১ ঘন্টা): Git Flow অনুসরণ করে একটি প্রজেক্টে develop, feature, release branch তৈরি করো।</div></div>
+          <div class="callout callout-tip" style="margin-top:.75rem">🎯 লক্ষ্য: যেকোনো Git conflict সমাধান করতে পারা।</div>
+        </div>
+      </div>
+
+      <div class="day-card">
+        <div class="day-header day3">
+          <i class="ti ti-calendar-event" aria-hidden="true" style="font-size:18px"></i>
+          দিন ৩ — Automation & প্রোফাইল (Pro Level)
+        </div>
+        <div class="day-body">
+          <div class="task"><div class="task-dot"></div><div>সকাল (২ ঘন্টা): GitHub Actions শেখো। একটি simple workflow তৈরি করো যেটা push হলে echo "Hello CI!" চালায়।</div></div>
+          <div class="task"><div class="task-dot"></div><div>দুপুর (৩ ঘন্টা): Python/Node project-এ real CI pipeline তৈরি করো — lint → test → build। Secrets ব্যবহার করো।</div></div>
+          <div class="task"><div class="task-dot"></div><div>বিকাল (২ ঘন্টা): একটি open source project-এ "good first issue" খুঁজে বের করো এবং সমাধান করার চেষ্টা করো।</div></div>
+          <div class="task"><div class="task-dot"></div><div>রাতে (১ ঘন্টা): GitHub প্রোফাইল polish করো। ৩টি সেরা project pin করো। Tech topics যোগ করো।</div></div>
+          <div class="callout callout-tip" style="margin-top:.75rem">🎯 লক্ষ্য: Working CI/CD pipeline সহ GitHub প্রোফাইল — Recruiter-ready!</div>
+        </div>
+      </div>
+
+      <div class="callout callout-info" style="margin-top:1rem">
+        🚀 <strong>পরবর্তী পদক্ষেপ:</strong> ৩ দিন পর Kubernetes, Docker Compose, Terraform শেখো এবং এগুলোকে GitHub Actions-এর সাথে integrate করো। এটাই হবে তোমার Senior DevOps Engineer-এর পথ।
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggle(id){
+  const body=document.getElementById(id+'-body');
+  const ch=document.getElementById(id+'-ch');
+  if(!body)return;
+  const isOpen=body.classList.contains('open');
+  body.classList.toggle('open',!isOpen);
+  if(ch)ch.classList.toggle('open',!isOpen);
+}
+document.querySelectorAll('.toc-item').forEach(btn=>{
+  btn.addEventListener('click',function(e){e.stopPropagation()});
+});
+toggle('s1');
+</script>
